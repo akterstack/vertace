@@ -4,29 +4,29 @@ import io.vertace.core.VertaceVerticle;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 
-public class HttpServerVerticle extends VertaceVerticle {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final int DEFAULT_HTTP_PORT = 7100;
+public abstract class HttpServerVerticle extends VertaceVerticle {
 
     private Integer port;
     private Router router;
     private HttpServer httpServer;
+    private List<HttpRestRouter> listOfHttpRestRouters = new ArrayList<>();
 
     public HttpServerVerticle() {
-        router = Router.router(vertx);
-        port = DEFAULT_HTTP_PORT;
+        this.port = port();
     }
+
+    public abstract Integer port();
 
     @Override
     public void start() {
+        router = Router.router(vertx);
         httpServer = vertx.createHttpServer()
                 .requestHandler(router::accept)
                 .listen();
         System.out.println("Server running in port: " + port);
-    }
-
-    public Router getVertxRouter() {
-        return router;
     }
 
     public HttpServer getVertxHttpServer() {
