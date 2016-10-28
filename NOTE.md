@@ -1,4 +1,5 @@
 ### Lifecycle
+- initialize `Vertace`
 - load verticle classes
 - register verticle classes
 - deploy verticle classes
