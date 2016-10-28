@@ -4,6 +4,11 @@ version '1.0.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'maven'
 
+compileJava {
+    options.fork = true
+    options.incremental = true
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
