@@ -9,6 +9,12 @@ import java.util.List;
 
 public class Registry {
 
+    private static List<Class<? extends VertaceVerticle>> listOfvertaceVerticleClass = new ArrayList<>();
+
+    public static void registerVertaceVerticle(Class<? extends VertaceVerticle> vertaceVerticleClass) {
+        listOfvertaceVerticleClass.add(vertaceVerticleClass);
+    }
+
     public static List<String> listOfClassNames(String packageName) throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;

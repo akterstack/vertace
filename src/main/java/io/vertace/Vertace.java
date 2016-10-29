@@ -18,12 +18,16 @@ public abstract class Vertace {
             e.printStackTrace();
         }
         vertace.initialize(vertaceAppClass, args);
-
+        vertace._registerVerticles();
     }
 
     private void initialize(Class<? extends Vertace> vertaceClass, String[] args) {
         this.args = args;
         this.vertaceClass = vertaceClass;
+    }
+
+    private List<Class<? extends VertaceVerticle>> _registerVerticles() {
+        return registerVerticles();
     }
 
     public List<Class<? extends VertaceVerticle>> registerVerticles() {
