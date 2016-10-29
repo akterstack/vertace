@@ -22,4 +22,8 @@ public class Registry {
         }
     }
 
+    public static Factory factoryOf(Class<? extends Factory> clazz) {
+        return mapOfFactories.get(clazz);
+    }
+
 }

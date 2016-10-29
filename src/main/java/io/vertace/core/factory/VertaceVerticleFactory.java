@@ -13,6 +13,11 @@ public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
 
     //private static Map<Class<? extends VertaceVerticle>, List<Clas>>
 
+    @Override
+    public void initialize() {
+
+    }
+
     public void createArchetypeInstance(Class<? extends VertaceVerticle> vertaceVerticleClass) {
         PackageScope psa = vertaceVerticleClass.getAnnotation(PackageScope.class);
         if(psa == null) return;
@@ -25,6 +30,11 @@ public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public VertaceVerticle instanceOf(Class<? extends VertaceVerticle> archClass) {
+        return null;
     }
 
 }
