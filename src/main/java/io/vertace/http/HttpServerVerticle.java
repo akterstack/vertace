@@ -7,7 +7,7 @@ import io.vertx.ext.web.Router;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HttpServerVerticle extends VertaceVerticle {
+public abstract class HttpServerVerticle extends VertaceVerticle<HttpServerVerticle> {
 
     private Integer port;
     private Router router;

@@ -1,15 +1,21 @@
 package io.vertace;
 
+import io.vertace.core.Registry;
 import io.vertace.core.VertaceVerticle;
+import io.vertace.core.factory.Factory;
+import io.vertace.core.factory.HttpRestRouterFactory;
+import io.vertace.core.factory.VertaceVerticleFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Vertace {
 
     private String[] args;
-    private Class<? extends Vertace> vertaceClass;
+    private Class<? extends Vertace> vertaceAppClass;
+    private List<Class<? extends Factory>> listOfFactoryClasses;
     private List<Class<? extends VertaceVerticle>> listOfRegisteredVerticles;
 
     public static void run(Class<? extends Vertace> vertaceAppClass, String[] args) {
@@ -19,15 +25,32 @@ public abstract class Vertace {
         } catch(InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        appVertace.initialize(vertaceAppClass, args);
-        List<Class<? extends VertaceVerticle>> loadedVerticles = appVertace.loadVerticles();
-        appVertace.registerVerticles(loadedVerticles);
+        appVertace.vertaceAppClass = vertaceAppClass;
+        appVertace.args = args;
+        appVertace.listOfFactoryClasses = Arrays.asList(
+                VertaceVerticleFactory.class,
+                HttpRestRouterFactory.class
+        );
+        appVertace.listOfRegisteredVerticles = new LinkedList<>();
+        appVertace.bootstrap();
+        appVertace.initialize();
     }
 
-    private void initialize(Class<? extends Vertace> vertaceClass, String[] args) {
-        this.args = args;
-        this.vertaceClass = vertaceClass;
-        this.listOfRegisteredVerticles = new LinkedList<>();
+    public void use(Class clazz) {
+        if(Factory.class.isAssignableFrom(clazz)) {
+            listOfFactoryClasses.add(clazz);
+        }//TODO: more usage here
+    }
+
+    public void bootstrap() {
+
+    }
+
+    private void initialize() {
+        listOfFactoryClasses.forEach(Registry::createFactory);
+        List<Class<? extends VertaceVerticle>> loadedVerticles = loadVerticles();
+        registerVerticles(loadedVerticles);
+        initializeVerticles();
     }
 
     private List<Class<? extends VertaceVerticle>> loadVerticles() {
@@ -39,6 +62,7 @@ public abstract class Vertace {
 
     /**
      * Lifecycle method
+     * todo: should I keep this method in lifecycle?
      * @param loadedVerticles
      */
     public void onLoadVerticles(List<Class<? extends VertaceVerticle>> loadedVerticles) {
@@ -52,10 +76,21 @@ public abstract class Vertace {
 
     /**
      * Lifecycle method, override to change
+     *
      * @param registeredVerticles
      */
     public void onRegisterVerticles(List<Class<? extends VertaceVerticle>> registeredVerticles) {
 
+    }
+
+    private void initializeVerticles() {
+        for(Class<? extends VertaceVerticle> vc : listOfRegisteredVerticles) {
+            try {
+                vc.newInstance();
+            } catch(InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
