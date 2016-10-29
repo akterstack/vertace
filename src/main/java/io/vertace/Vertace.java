@@ -23,7 +23,7 @@ public abstract class Vertace {
         try {
             appVertace = vertaceAppClass.newInstance();
         } catch(InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO: proper message
         }
         appVertace.vertaceAppClass = vertaceAppClass;
         appVertace.args = args;
@@ -50,7 +50,7 @@ public abstract class Vertace {
         listOfFactoryClasses.forEach(Registry::createFactory);
         List<Class<? extends VertaceVerticle>> loadedVerticles = loadVerticles();
         registerVerticles(loadedVerticles);
-        initializeVerticles();
+        initializeFactoryLifecycle();
     }
 
     private List<Class<? extends VertaceVerticle>> loadVerticles() {
@@ -83,12 +83,12 @@ public abstract class Vertace {
 
     }
 
-    private void initializeVerticles() {
-        for(Class<? extends VertaceVerticle> vc : listOfRegisteredVerticles) {
+    private void initializeFactoryLifecycle() {
+        for(Class<? extends Factory> fc : listOfFactoryClasses) {
             try {
-                vc.newInstance();
+                fc.newInstance();
             } catch(InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+                e.printStackTrace();// TODO: handle properly
             }
         }
     }

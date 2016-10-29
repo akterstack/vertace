@@ -1,7 +1,7 @@
 package io.vertace.core.factory;
 
-public interface Factory<T> {
+public interface Factory<A> {
 
-    void createInstance();
+    void createArchetypeInstance(Class<? extends A> archetypeClass);
 
 }
