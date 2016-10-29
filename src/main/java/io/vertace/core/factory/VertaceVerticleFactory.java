@@ -37,4 +37,9 @@ public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
         return null;
     }
 
+    @Override
+    public Class<VertaceVerticle> factoryFor() {
+        return VertaceVerticle.class;
+    }
+
 }

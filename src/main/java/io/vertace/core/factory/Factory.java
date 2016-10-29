@@ -8,4 +8,5 @@ public interface Factory<A> {
 
     A instanceOf(Class<? extends A> archClass);
 
+    Class<A> factoryFor();
 }

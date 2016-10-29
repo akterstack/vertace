@@ -17,4 +17,9 @@ public class HttpRestRouterFactory implements Factory<HttpRestRouter> {
     public HttpRestRouter instanceOf(Class<? extends HttpRestRouter> archClass) {
         return null;
     }
+
+    @Override
+    public Class<HttpRestRouter> factoryFor() {
+        return HttpRestRouter.class;
+    }
 }
