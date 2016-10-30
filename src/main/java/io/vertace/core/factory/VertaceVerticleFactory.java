@@ -1,23 +1,27 @@
 package io.vertace.core.factory;
 
 import io.vertace.PackageScope;
+import io.vertace.Vertace;
 import io.vertace.core.VertaceClassLoader;
 import io.vertace.core.VertaceVerticle;
-import io.vertace.http.HttpRestRouter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
 
-    //private static Map<Class<? extends VertaceVerticle>, List<Clas>>
+    //private static
+
+    @Override
+    public Class<VertaceVerticle> factoryFor() {
+        return VertaceVerticle.class;
+    }
 
     @Override
     public void initialize() {
 
     }
 
+    @Override
     public void createArchetypeInstance(Class<? extends VertaceVerticle> vertaceVerticleClass) {
         PackageScope psa = vertaceVerticleClass.getAnnotation(PackageScope.class);
         if(psa == null) return;
@@ -25,6 +29,8 @@ public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
             try {
                 for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
                     Class cls = Class.forName(cname);
+                    Factory factory = Vertace.factoryOf(cls);
+                    factory.register(cls);
                 }
             } catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -35,11 +41,6 @@ public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
     @Override
     public VertaceVerticle instanceOf(Class<? extends VertaceVerticle> archClass) {
         return null;
-    }
-
-    @Override
-    public Class<VertaceVerticle> factoryFor() {
-        return VertaceVerticle.class;
     }
 
 }

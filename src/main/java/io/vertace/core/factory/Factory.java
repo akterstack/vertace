@@ -1,12 +1,25 @@
 package io.vertace.core.factory;
 
-public interface Factory<A> {
+import java.util.ArrayList;
+import java.util.List;
+
+public interface Factory<T> {
+
+    List<Class> archClasses = new ArrayList<>();
+
+    Class<T> factoryFor();
 
     void initialize();
 
-    void createArchetypeInstance(Class<? extends A> archetypeClass);
+    void createArchetypeInstance(Class<? extends T> archetypeClass);
 
-    A instanceOf(Class<? extends A> archClass);
+    T instanceOf(Class<? extends T> archClass);
 
-    Class<A> factoryFor();
+    default void register(Class<T> t) {
+        archClasses.add(t);
+    }
+
+    default List<Class> getAllArchClasses() {
+        return archClasses;
+    }
 }

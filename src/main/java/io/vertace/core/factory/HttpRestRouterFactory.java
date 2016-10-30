@@ -5,6 +5,11 @@ import io.vertace.http.HttpRestRouter;
 public class HttpRestRouterFactory implements Factory<HttpRestRouter> {
 
     @Override
+    public Class<HttpRestRouter> factoryFor() {
+        return HttpRestRouter.class;
+    }
+
+    @Override
     public void initialize() {
 
     }
@@ -16,10 +21,5 @@ public class HttpRestRouterFactory implements Factory<HttpRestRouter> {
     @Override
     public HttpRestRouter instanceOf(Class<? extends HttpRestRouter> archClass) {
         return null;
-    }
-
-    @Override
-    public Class<HttpRestRouter> factoryFor() {
-        return HttpRestRouter.class;
     }
 }
