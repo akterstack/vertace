@@ -2,24 +2,16 @@ package io.vertace.core.factory;
 
 import io.vertace.http.HttpRestRouter;
 
-public class HttpRestRouterFactory implements Factory<HttpRestRouter> {
+public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
 
     @Override
-    public Class<HttpRestRouter> factoryFor() {
+    public Class<HttpRestRouter> factoryOf() {
         return HttpRestRouter.class;
     }
 
     @Override
-    public void initialize() {
-
-    }
-
-    public void createArchetypeInstance(Class<? extends HttpRestRouter> clazz) {
-
-    }
-
-    @Override
-    public HttpRestRouter instanceOf(Class<? extends HttpRestRouter> archClass) {
+    public HttpRestRouter create(Class<HttpRestRouter> t) {
         return null;
     }
+
 }

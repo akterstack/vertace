@@ -7,24 +7,19 @@ import io.vertace.core.VertaceVerticle;
 
 import java.io.IOException;
 
-public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
+public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
 
     //private static
 
     @Override
-    public Class<VertaceVerticle> factoryFor() {
+    public Class<VertaceVerticle> factoryOf() {
         return VertaceVerticle.class;
     }
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void createArchetypeInstance(Class<? extends VertaceVerticle> vertaceVerticleClass) {
+    public VertaceVerticle create(Class<VertaceVerticle> vertaceVerticleClass) {
         PackageScope psa = vertaceVerticleClass.getAnnotation(PackageScope.class);
-        if(psa == null) return;
+        if(psa == null) return null;
         for(String pkg : psa.value()) {
             try {
                 for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
@@ -36,10 +31,6 @@ public class VertaceVerticleFactory implements Factory<VertaceVerticle> {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public VertaceVerticle instanceOf(Class<? extends VertaceVerticle> archClass) {
         return null;
     }
 

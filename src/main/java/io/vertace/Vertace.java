@@ -4,7 +4,6 @@ import io.vertace.core.VertaceVerticle;
 import io.vertace.core.factory.Factory;
 import io.vertace.core.factory.HttpRestRouterFactory;
 import io.vertace.core.factory.VertaceVerticleFactory;
-import io.vertace.http.HttpRestRouter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +86,7 @@ public abstract class Vertace {
     public void createFactory(Class<? extends Factory> clazz) {
         try {
             Factory<?> factory = clazz.newInstance();
-            mapOfFactories.put(factory.factoryFor(), factory);
+            mapOfFactories.put(factory.factoryOf(), factory);
         } catch(InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -98,7 +97,9 @@ public abstract class Vertace {
     }
 
     private void initializeFactoryLifecycle() {
+        listOfFactoryClasses.forEach(fc -> {
 
+        });
     }
 
     public void bootstrap() {
