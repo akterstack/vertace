@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface Factory<T> {
 
-    Class<T> factoryOf();
+    Class<T> factoryFor();
 
     void register(Class<T> t);
 

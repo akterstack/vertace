@@ -7,14 +7,14 @@ import io.vertx.ext.web.Router;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HttpServerVerticle extends VertaceVerticle<HttpServerVerticle> {
+public abstract class VertaceHttpServer extends VertaceVerticle<VertaceHttpServer> {
 
     private Integer port;
     private Router router;
     private HttpServer httpServer;
     private List<HttpRestRouter> listOfHttpRestRouters = new ArrayList<>();
 
-    public HttpServerVerticle() {
+    public VertaceHttpServer() {
         this.port = port();
     }
 

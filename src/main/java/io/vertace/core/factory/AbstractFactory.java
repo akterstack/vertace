@@ -8,7 +8,7 @@ public abstract class AbstractFactory<T> implements Factory<T> {
 
     private Map<Class<T>, T> mapOfArtifactClassAndObject = new HashMap<>();
 
-    public abstract Class<T> factoryOf();
+    public abstract Class<T> factoryFor();
 
     @Override
     public void register(Class<T> t) {
@@ -17,7 +17,9 @@ public abstract class AbstractFactory<T> implements Factory<T> {
 
     @Override
     public void initialize() {
-        getAllArtifactClasses().forEach(ac -> mapOfArtifactClassAndObject.put(ac, create(ac)));
+        getAllArtifactClasses()
+                .forEach(ac ->
+                        mapOfArtifactClassAndObject.put(ac, create(ac)));
     }
 
     @Override

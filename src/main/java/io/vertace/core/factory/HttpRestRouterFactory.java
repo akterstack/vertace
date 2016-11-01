@@ -5,7 +5,7 @@ import io.vertace.http.HttpRestRouter;
 public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
 
     @Override
-    public Class<HttpRestRouter> factoryOf() {
+    public Class<HttpRestRouter> factoryFor() {
         return HttpRestRouter.class;
     }
 

@@ -12,7 +12,7 @@ public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
     //private static
 
     @Override
-    public Class<VertaceVerticle> factoryOf() {
+    public Class<VertaceVerticle> factoryFor() {
         return VertaceVerticle.class;
     }
 
@@ -24,7 +24,7 @@ public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
             try {
                 for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
                     Class cls = Class.forName(cname);
-                    Factory factory = Vertace.factoryOf(cls);
+                    Factory factory = Vertace.factoryFor(cls);
                     factory.register(cls);
                 }
             } catch(IOException | ClassNotFoundException e) {
