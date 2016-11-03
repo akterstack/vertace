@@ -24,8 +24,7 @@ public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
             try {
                 for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
                     Class cls = Class.forName(cname);
-                    Factory factory = Vertace.factoryFor(cls);
-                    factory.register(cls);
+
                 }
             } catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();

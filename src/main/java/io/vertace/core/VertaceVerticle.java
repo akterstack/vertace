@@ -1,14 +1,16 @@
 package io.vertace.core;
 
-import io.vertace.core.factory.VertaceVerticleFactory;
+import io.hackable.Hackable;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 
-public abstract class VertaceVerticle<T> extends AbstractVerticle {
+public abstract class VertaceVerticle<T> extends AbstractVerticle implements Hackable {
 
-    private VertaceVerticleFactory vertaceVerticleFactory = new VertaceVerticleFactory();
+    @Override
+    public void start(Future<Void> future) {
+        trigger("deployVerticle", this.getClass(), vertx);
 
-    public VertaceVerticle() {
-
+        //if(future.)
     }
 
 }
