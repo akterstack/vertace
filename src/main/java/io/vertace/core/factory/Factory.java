@@ -7,16 +7,14 @@ public interface Factory<T> {
 
     Class<T> factoryFor();
 
-    void register(Class<T> t);
+    void register(Class<? extends T> t);
 
     void initialize();
 
-    T create(Class<T> t);
+    T create(Class<? extends T> t);
 
-    T instanceOf(Class<? extends T> archClass);
+    Set<Class<? extends T>> getAllArtifactClasses();
 
-    Set<Class<T>> getAllArtifactClasses();
-
-    List<T> getAllArtifactObjects();
+    List<? extends T> getAllArtifactObjects();
 
 }

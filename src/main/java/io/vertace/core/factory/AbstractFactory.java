@@ -7,14 +7,15 @@ import java.util.Set;
 
 public abstract class AbstractFactory<T> implements Factory<T> {
 
-    private Map<Class<T>, T> mapOfArtifactClassAndObject = new HashMap<>();
+    private Map<Class<? extends T>, T> mapOfArtifactClassAndObject = new HashMap<>();
 
     public abstract Class<T> factoryFor();
 
     @Override
-    public void register(Class<T> t) {
+    public void register(Class<? extends T> t) {
         if(! factoryFor().isAssignableFrom(t))
             System.out.println("Cannot assign artifact: " + t.getName());
+        System.out.println(t);
         mapOfArtifactClassAndObject.put(t, null);
     }
 
@@ -26,15 +27,10 @@ public abstract class AbstractFactory<T> implements Factory<T> {
     }
 
     @Override
-    public abstract T create(Class<T> t);
+    public abstract T create(Class<? extends T> t);
 
     @Override
-    public T instanceOf(Class<? extends T> archClass) {
-        return null;
-    }
-
-    @Override
-    public Set<Class<T>> getAllArtifactClasses() {
+    public Set<Class<? extends T>> getAllArtifactClasses() {
         return mapOfArtifactClassAndObject.keySet();
     }
 

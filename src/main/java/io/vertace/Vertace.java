@@ -19,7 +19,6 @@ public abstract class Vertace {
 
     private static String[] args;
     private static Class<? extends Vertace> vertaceAppClass;
-    private static List<Class<?>> loadedClasses;
     private static Map<Class<?>, Factory> factoryOfArtifactsMap;
     private static Set<Class<?>> artifacts = new HashSet<Class<?>>() {{
         add(VertaceVerticle.class);
@@ -33,6 +32,7 @@ public abstract class Vertace {
         /* Lifecycle methods */
         bootstrap();
         register();
+        initialize();
     }
 
     private static void bootstrap() {
@@ -47,7 +47,6 @@ public abstract class Vertace {
         PackageScope packageScope = vertaceAppClass.getAnnotation(PackageScope.class);
         if(packageScope == null) return;
 
-        loadedClasses = new ArrayList<>();
         for(String pkg : packageScope.value()) {
             try {
                 for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
@@ -75,17 +74,16 @@ public abstract class Vertace {
         artifacts.forEach(ac -> {
             if(ac.isAssignableFrom(clazz)) {
                 Factory factory = factoryOfArtifactsMap.get(ac);
-                factory.register(ac);
+                factory.register(clazz);
             }
         });
     }
 
     private static void initialize() {
-        artifacts.forEach(Vertace::initialize);
-    }
-
-    private static void initialize(Class<?> artifact) {
-
+        artifacts.forEach(ac -> {
+            Factory factory = factoryOfArtifactsMap.get(ac);
+            factory.initialize();
+        });
     }
 
 }

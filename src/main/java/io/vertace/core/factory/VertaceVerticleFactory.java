@@ -1,11 +1,7 @@
 package io.vertace.core.factory;
 
-import io.vertace.PackageScope;
-import io.vertace.Vertace;
-import io.vertace.core.VertaceClassLoader;
 import io.vertace.core.VertaceVerticle;
-
-import java.io.IOException;
+import io.vertx.core.Vertx;
 
 public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
 
@@ -17,18 +13,13 @@ public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
     }
 
     @Override
-    public VertaceVerticle create(Class<VertaceVerticle> vertaceVerticleClass) {
-        PackageScope psa = vertaceVerticleClass.getAnnotation(PackageScope.class);
-        if(psa == null) return null;
-        for(String pkg : psa.value()) {
-            try {
-                for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
-                    Class cls = Class.forName(cname);
-
-                }
-            } catch(IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+    public VertaceVerticle create(Class<? extends VertaceVerticle> vertaceVerticleClass) {
+        try {
+            VertaceVerticle<?> vv = vertaceVerticleClass.newInstance();
+            Vertx.vertx().deployVerticle(vv);
+            return vv;
+        } catch(InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
         return null;
     }
