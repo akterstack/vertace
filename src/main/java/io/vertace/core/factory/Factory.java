@@ -1,5 +1,6 @@
 package io.vertace.core.factory;
 
+import java.util.List;
 import java.util.Set;
 
 public interface Factory<T> {
@@ -16,6 +17,6 @@ public interface Factory<T> {
 
     Set<Class<T>> getAllArtifactClasses();
 
-    Set<T> getAllArtifactObjects();
+    List<T> getAllArtifactObjects();
 
 }

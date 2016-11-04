@@ -1,6 +1,7 @@
 package io.vertace.core.factory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,8 @@ public abstract class AbstractFactory<T> implements Factory<T> {
 
     @Override
     public void register(Class<T> t) {
+        if(! factoryFor().isAssignableFrom(t))
+            System.out.println("Cannot assign artifact: " + t.getName());
         mapOfArtifactClassAndObject.put(t, null);
     }
 
@@ -32,11 +35,11 @@ public abstract class AbstractFactory<T> implements Factory<T> {
 
     @Override
     public Set<Class<T>> getAllArtifactClasses() {
-        return null;
+        return mapOfArtifactClassAndObject.keySet();
     }
 
     @Override
-    public Set<T> getAllArtifactObjects() {
-        return null;
+    public List<T> getAllArtifactObjects() {
+        return (List<T>)mapOfArtifactClassAndObject.values();
     }
 }
