@@ -31,6 +31,7 @@ public abstract class VertaceHttpServer extends VertaceVerticle<VertaceHttpServe
                 .requestHandler(router::accept);
         httpServer = host() == null ? httpServer.listen(port()) : httpServer.listen(port(), host());
         System.out.println("Server running in port: " + port);
+
     }
 
     public HttpServer getVertxHttpServer() {
