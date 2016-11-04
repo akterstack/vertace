@@ -1,8 +1,6 @@
 package io.vertace.http;
 
-import io.hackable.Hackable;
 import io.vertace.core.VertaceVerticle;
-import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 
@@ -21,14 +19,17 @@ public abstract class VertaceHttpServer extends VertaceVerticle<VertaceHttpServe
     }
 
     public abstract Integer port();
+    public String  host() {
+        return null;
+    }
 
     @Override
     public void start() {
-        trigger("beforeDeployVerticle", this.getClass(), vertx);
+        trigger("beforeDeploy", this.getClass(), vertx);
         router = Router.router(vertx);
         httpServer = vertx.createHttpServer()
-                .requestHandler(router::accept)
-                .listen(port);
+                .requestHandler(router::accept);
+        httpServer = host() == null ? httpServer.listen(port()) : httpServer.listen(port(), host());
         System.out.println("Server running in port: " + port);
     }
 
