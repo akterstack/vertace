@@ -13,12 +13,17 @@ public abstract class HttpRestRouter<R> {
     private String mountPoint;
     private List<HttpRoute> listOfHttpRoutes = new LinkedList<>();
 
-    public void initialize() {
+    public final void initialize() {
         listOfHttpRoutes.forEach(HttpRoute::register);
     }
 
     protected R subRouteOf(String mountPoint) {
         this.mountPoint = mountPoint;
+        return (R)this;
+    }
+
+    protected R any(String path, RequestResponseHandler handler) {
+        //TODO
         return (R)this;
     }
 

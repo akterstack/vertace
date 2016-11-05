@@ -10,7 +10,7 @@ public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
     }
 
     @Override
-    public HttpRestRouter create(Class<? extends HttpRestRouter> t) {
+    public HttpRestRouter initialize(Class<? extends HttpRestRouter> t) {
         try {
             HttpRestRouter<?> hrr = t.newInstance();
             return hrr;

@@ -11,7 +11,7 @@ public interface Factory<T> {
 
     void initialize();
 
-    T create(Class<? extends T> t);
+    T initialize(Class<? extends T> t);
 
     Set<Class<? extends T>> getAllArtifactClasses();
 

@@ -1,6 +1,11 @@
 package io.vertace.http;
 
+import io.vertace.http.context.HttpParamContext;
+import io.vertace.http.context.RequestContext;
+import io.vertace.http.context.ResponseContext;
+import io.vertace.http.handler.HttpParamHandler;
 import io.vertace.http.handler.HttpRouteHandler;
+import io.vertace.http.handler.RequestResponseHandler;
 import io.vertx.core.http.HttpMethod;
 
 public class HttpRoute {
@@ -23,6 +28,10 @@ public class HttpRoute {
                 ((HttpParamHandler)httpRouteHandler).handle(new HttpParamContext(rctx));
             }
         });*/
+    }
+
+    public String toString() {
+        return httpMethod + " " + path;
     }
 
     @Override

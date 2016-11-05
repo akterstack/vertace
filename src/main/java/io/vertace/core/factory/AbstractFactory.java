@@ -23,11 +23,11 @@ public abstract class AbstractFactory<T> implements Factory<T> {
     public void initialize() {
         getAllArtifactClasses()
                 .forEach(ac ->
-                        mapOfArtifactClassAndObject.put(ac, create(ac)));
+                        mapOfArtifactClassAndObject.put(ac, initialize(ac)));
     }
 
     @Override
-    public abstract T create(Class<? extends T> t);
+    public abstract T initialize(Class<? extends T> t);
 
     @Override
     public Set<Class<? extends T>> getAllArtifactClasses() {

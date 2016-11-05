@@ -13,7 +13,7 @@ public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
     }
 
     @Override
-    public VertaceVerticle create(Class<? extends VertaceVerticle> vertaceVerticleClass) {
+    public VertaceVerticle initialize(Class<? extends VertaceVerticle> vertaceVerticleClass) {
         try {
             VertaceVerticle<?> vv = vertaceVerticleClass.newInstance();
             Vertx.vertx().deployVerticle(vv);
