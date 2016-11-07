@@ -1,7 +1,11 @@
 package io.vertace.core.factory;
 
+import io.vertace.Vertace;
 import io.vertace.core.VertaceVerticle;
 import io.vertx.core.Vertx;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
 
@@ -15,10 +19,11 @@ public class VertaceVerticleFactory extends AbstractFactory<VertaceVerticle> {
     @Override
     public VertaceVerticle initialize(Class<? extends VertaceVerticle> vertaceVerticleClass) {
         try {
-            VertaceVerticle<?> vv = vertaceVerticleClass.newInstance();
+            Constructor<? extends VertaceVerticle> constructor = vertaceVerticleClass.getConstructor(Vertace.class);
+            VertaceVerticle vv = constructor.newInstance();
             Vertx.vertx().deployVerticle(vv);
             return vv;
-        } catch(InstantiationException | IllegalAccessException e) {
+        } catch(InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
         return null;

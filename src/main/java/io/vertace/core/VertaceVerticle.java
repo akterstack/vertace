@@ -3,28 +3,28 @@ package io.vertace.core;
 import io.hackable.Hackable;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 
 public abstract class VertaceVerticle<T> extends AbstractVerticle implements Hackable {
 
-    protected void triggerBeforeDeploy(Vertx vertx) {
-        trigger("deployVerticle", this.getClass(), vertx);
-    }
-
-    protected void triggerBeforeUndeploy(Vertx vertx) {
-        trigger("deployVerticle", this.getClass(), vertx);
-    }
-
     @Override
-    public void start(Future<Void> future) throws Exception {
-        triggerBeforeDeploy(vertx);
+    public final void start(Future<Void> future) throws Exception {
+        trigger("beforeInitVerticle", this.getClass(), vertx);
+        initialize(future);
+        trigger("beforeDeployVerticle", this.getClass(), vertx);
         deploy(future);
     }
 
     @Override
-    public void stop(Future<Void> future) throws Exception {
-        triggerBeforeUndeploy(vertx);
+    public final void stop(Future<Void> future) throws Exception {
+        trigger("beforeUndeployVerticle", this.getClass(), vertx);
         undeploy(future);
+    }
+
+    protected void initialize(Future<Void> future) {
+        initialize();
+    }
+
+    protected void initialize() {
     }
 
     protected void deploy(Future<Void> future) {
