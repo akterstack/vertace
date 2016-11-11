@@ -1,10 +1,11 @@
 package io.vertace.core;
 
-import io.hackable.Hackable;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 
-public abstract class VertaceVerticle<T> extends AbstractVerticle implements Hackable {
+import static io.hackable.Hackable.*;
+
+public abstract class VertaceVerticle<T> extends AbstractVerticle {
 
     @Override
     public final void start(Future<Void> future) throws Exception {
