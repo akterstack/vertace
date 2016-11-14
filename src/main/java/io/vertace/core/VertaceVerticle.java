@@ -9,7 +9,9 @@ public abstract class VertaceVerticle extends AbstractVerticle {
 
     @Override
     public final void start(Future<Void> future) throws Exception {
-        trigger("beforeInitVerticle", this.getClass(), vertx);
+        trigger("beforeBootstrapVerticle", this.getClass(), vertx);
+        bootstrap(future);
+        trigger("beforeInitializeVerticle", this.getClass(), vertx);
         initialize(future);
         trigger("beforeDeployVerticle", this.getClass(), vertx);
         deploy(future);
@@ -19,6 +21,10 @@ public abstract class VertaceVerticle extends AbstractVerticle {
     public final void stop(Future<Void> future) throws Exception {
         trigger("beforeUndeployVerticle", this.getClass(), vertx);
         undeploy(future);
+    }
+
+    protected void bootstrap(Future<Void> future) {
+
     }
 
     protected void initialize(Future<Void> future) {

@@ -6,6 +6,7 @@ import io.vertace.core.factory.Factory;
 import io.vertace.core.factory.HttpRestRouterFactory;
 import io.vertace.core.factory.VertaceVerticleFactory;
 import io.vertace.http.HttpRestRouter;
+import io.vertx.core.Vertx;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,6 +23,10 @@ public abstract class Vertace extends VertaceVerticle {
         add(VertaceVerticle.class);
         add(HttpRestRouter.class);
     }};
+
+    public static void deploy(Vertace vertaceApp) {
+        Vertx.vertx().deployVerticle(vertaceApp);
+    }
 
     public void run(String... args) {
         this.args = args;
