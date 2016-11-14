@@ -8,16 +8,14 @@ import io.vertace.core.factory.VertaceVerticleFactory;
 import io.vertace.http.HttpRestRouter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Vertace {
+public abstract class Vertace extends VertaceVerticle {
 
-    private static String[] args;
+    private String[] args;
     private static Class<? extends Vertace> vertaceAppClass;
     private static Map<Class<?>, Factory> factoryOfArtifactsMap;
     private static Set<Class<?>> artifacts = new HashSet<Class<?>>() {{
@@ -25,14 +23,13 @@ public abstract class Vertace {
         add(HttpRestRouter.class);
     }};
 
-    public static void run(Class<? extends Vertace> vertaceClass, String[] args) {
-        vertaceAppClass = vertaceClass;
-        Vertace.args = args;
+    public void run(String... args) {
+        this.args = args;
 
         /* Lifecycle methods */
         bootstrap();
         register();
-        initialize();
+        _initialize();
     }
 
     private static void bootstrap() {
@@ -79,7 +76,7 @@ public abstract class Vertace {
         });
     }
 
-    private static void initialize() {
+    private static void _initialize() {
         artifacts.forEach(ac -> {
             Factory factory = factoryOfArtifactsMap.get(ac);
             factory.initialize();

@@ -5,7 +5,7 @@ import io.vertx.core.Future;
 
 import static io.hackable.Hackable.*;
 
-public abstract class VertaceVerticle<T> extends AbstractVerticle {
+public abstract class VertaceVerticle extends AbstractVerticle {
 
     @Override
     public final void start(Future<Void> future) throws Exception {

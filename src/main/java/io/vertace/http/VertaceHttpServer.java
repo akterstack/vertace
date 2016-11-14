@@ -8,7 +8,7 @@ import io.vertx.ext.web.Router;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class VertaceHttpServer extends VertaceVerticle<VertaceHttpServer> {
+public abstract class VertaceHttpServer extends VertaceVerticle {
 
     private Integer port;
     private Router router;
@@ -28,7 +28,6 @@ public abstract class VertaceHttpServer extends VertaceVerticle<VertaceHttpServe
     @Override
     public void deploy(Future<Void> future) {
         router = Router.router(vertx);
-        trigger("createVertxRouter", router);
         initializeVertaceRouters();
         httpServer = vertx.createHttpServer()
                 .requestHandler(router::accept);
