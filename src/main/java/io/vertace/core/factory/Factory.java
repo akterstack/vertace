@@ -1,5 +1,7 @@
 package io.vertace.core.factory;
 
+import io.vertace.Vertace;
+
 import java.util.List;
 import java.util.Set;
 
@@ -14,5 +16,7 @@ public interface Factory<C> {
     Set<Class<? extends C>> getAllComponentClasses();
 
     List<? extends C> getAllComponentObjects();
+
+    Vertace vertace();
 
 }

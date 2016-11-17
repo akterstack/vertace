@@ -1,5 +1,6 @@
 package io.vertace.http;
 
+import io.vertace.core.Component;
 import io.vertace.http.handler.HttpParamHandler;
 import io.vertace.http.handler.HttpRouteHandler;
 import io.vertace.http.handler.RequestResponseHandler;
@@ -8,7 +9,7 @@ import io.vertx.core.http.HttpMethod;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class HttpRestRouter<R> {
+public abstract class HttpRestRouter<R> implements Component {
 
     private String mountPoint;
     private List<HttpRoute> listOfHttpRoutes = new LinkedList<>();

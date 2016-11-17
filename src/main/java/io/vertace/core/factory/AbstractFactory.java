@@ -1,5 +1,6 @@
 package io.vertace.core.factory;
 
+import io.vertace.Vertace;
 import io.vertace.core.VertaceException;
 
 import java.util.HashMap;
@@ -9,7 +10,12 @@ import java.util.Set;
 
 public abstract class AbstractFactory<C> implements Factory<C> {
 
-    private Map<Class<? extends C>, C> mapOfArtifactClassAndObject = new HashMap<>();
+    private Vertace vertace;
+    private final Map<Class<? extends C>, C> mapOfArtifactClassAndObject = new HashMap<>();
+
+    public AbstractFactory(Vertace vertace) {
+
+    }
 
     public abstract Class<C> factoryFor();
 
@@ -46,5 +52,10 @@ public abstract class AbstractFactory<C> implements Factory<C> {
     @Override
     public List<C> getAllComponentObjects() {
         return (List<C>)mapOfArtifactClassAndObject.values();
+    }
+
+    @Override
+    public Vertace vertace() {
+        return vertace;
     }
 }
