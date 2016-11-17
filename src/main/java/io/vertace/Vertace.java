@@ -2,6 +2,7 @@ package io.vertace;
 
 import io.vertace.core.VertaceClassLoader;
 import io.vertace.core.VertaceException;
+import io.vertace.core.VertaceLifecycle;
 import io.vertace.core.VertaceVerticle;
 import io.vertace.core.factory.Factory;
 import io.vertace.core.factory.HttpRestRouterFactory;
@@ -16,38 +17,36 @@ import java.util.Set;
 
 public abstract class Vertace extends VertaceVerticle {
 
-    public enum LifeCycle {BOOTSTRAP, REGISTER, INITIALIZE, DEPLOY}
+    public enum LifeCycleState {BOOTSTRAP, REGISTER, INITIALIZE, DEPLOY}
 
     private String[] args;
-    private LifeCycle currentCycle;
+    private VertaceLifecycle vertaceLifecycle;
+    private LifeCycleState currentState;
     private Map<Class<?>, Factory> componentFactoriesMap;
     private Set<Class<?>> components = new HashSet<Class<?>>() {{
         add(HttpRestRouter.class);
     }};
 
-    public static void deploy(Vertace vertaceApp) {
-        vertaceApp._bootstrap();
-        vertaceApp._register();
-        vertaceApp._initialize();
-        Vertx.vertx().deployVerticle(vertaceApp);
-        vertaceApp.currentCycle = LifeCycle.DEPLOY;
+    public Vertace() {
+        this.vertaceLifecycle = new VertaceLifecycle() {
+        };
     }
 
-    public static void deploy(Vertace vertaceApp, String... args) {
-        vertaceApp.args = args;
-        deploy(vertaceApp);
+    public Vertace(VertaceLifecycle vertaceLifecycle) {
+        this.vertaceLifecycle = vertaceLifecycle;
     }
 
     private void _bootstrap() {
         componentFactoriesMap = new HashMap<Class<?>, Factory>() {{
             put(HttpRestRouter.class, new HttpRestRouterFactory());
         }};
-        currentCycle = LifeCycle.BOOTSTRAP;
+        vertaceLifecycle.bootstrap();
+        currentState = LifeCycleState.BOOTSTRAP;
     }
 
     public <C> void registerFactory(Class<C> componentClass,
                                     Factory<C> factoryObject) throws VertaceException {
-        if(!LifeCycle.BOOTSTRAP.equals(currentCycle))
+        if(!LifeCycleState.BOOTSTRAP.equals(currentState))
             throw new VertaceException("Register Factory is possible only in Bootstrap lifecycle");
         componentFactoriesMap.put(componentClass, factoryObject);
     }
@@ -76,6 +75,8 @@ public abstract class Vertace extends VertaceVerticle {
             System.out.println("\nRegistered " + ac.getSimpleName() + ": " + classes.size());
             classes.forEach(System.out::println);
         });
+        vertaceLifecycle.bootstrap();
+        currentState = LifeCycleState.REGISTER;
     }
 
     @SuppressWarnings("unchecked")
@@ -93,6 +94,22 @@ public abstract class Vertace extends VertaceVerticle {
             Factory factory = componentFactoriesMap.get(ac);
             factory.initialize();
         });
+        vertaceLifecycle.initialize();
+        currentState = LifeCycleState.INITIALIZE;
+    }
+
+    public static void deploy(Vertace vertaceApp) {
+        vertaceApp._bootstrap();
+        vertaceApp._register();
+        vertaceApp._initialize();
+        Vertx.vertx().deployVerticle(vertaceApp);
+        vertaceApp.vertaceLifecycle.deploy();
+        vertaceApp.currentState = LifeCycleState.DEPLOY;
+    }
+
+    public static void deploy(Vertace vertaceApp, String... args) {
+        vertaceApp.args = args;
+        deploy(vertaceApp);
     }
 
 }
