@@ -14,7 +14,7 @@ public abstract class AbstractFactory<C> implements Factory<C> {
     private final Map<Class<? extends C>, C> mapOfArtifactClassAndObject = new HashMap<>();
 
     public AbstractFactory(Vertace vertace) {
-
+        this.vertace = vertace;
     }
 
     public abstract Class<C> factoryFor();

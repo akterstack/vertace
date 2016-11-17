@@ -79,11 +79,10 @@ public abstract class Vertace extends VertaceVerticle implements VertaceLifecycl
         onInitialize();
     }
 
-    public <C extends Component> void registerFactory(Class<C> componentClass,
-                                    Factory<C> factoryObject) throws VertaceException {
+    public <C extends Component> void registerFactory(Factory<C> factoryObject) throws VertaceException {
         if(!LifeCycleState.BOOTSTRAP.equals(currentState))
             throw new VertaceException("Register Factory is possible only in Bootstrap lifecycle");
-        componentFactoriesMap.put(componentClass, factoryObject);
+        componentFactoriesMap.put(factoryObject.factoryFor(), factoryObject);
     }
 
     public Set<Class<? extends Component>> getComponentClasses() {

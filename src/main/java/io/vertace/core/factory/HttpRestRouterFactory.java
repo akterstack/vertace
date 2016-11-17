@@ -5,8 +5,8 @@ import io.vertace.http.HttpRestRouter;
 
 public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
 
-    public HttpRestRouterFactory(VertaceWeb vertace) {
-        super(vertace);
+    public HttpRestRouterFactory(VertaceWeb vertaceWeb) {
+        super(vertaceWeb);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
     public HttpRestRouter initialize(Class<? extends HttpRestRouter> c) {
         try {
             HttpRestRouter<?> hrr = c.newInstance();
-            hrr.initialize();
+            hrr.initialize((VertaceWeb)vertace());
             return hrr;
         } catch(InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package io.vertace.http;
 
+import io.vertace.VertaceWeb;
 import io.vertace.core.Component;
 import io.vertace.http.handler.HttpParamHandler;
 import io.vertace.http.handler.HttpRouteHandler;
@@ -14,8 +15,8 @@ public abstract class HttpRestRouter<R> implements Component {
     private String mountPoint;
     private List<HttpRoute> listOfHttpRoutes = new LinkedList<>();
 
-    public final void initialize() {
-        listOfHttpRoutes.forEach(HttpRoute::register);
+    public final void initialize(VertaceWeb vertaceWeb) {
+        listOfHttpRoutes.forEach(route -> route.register(vertaceWeb));
     }
 
     protected R subRouteOf(String mountPoint) {

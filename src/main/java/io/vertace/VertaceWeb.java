@@ -2,7 +2,6 @@ package io.vertace;
 
 import io.vertace.core.VertaceException;
 import io.vertace.core.factory.HttpRestRouterFactory;
-import io.vertace.http.HttpRestRouter;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
@@ -23,7 +22,7 @@ public abstract class VertaceWeb extends Vertace {
 
     @Override
     public void onBootstrap() throws VertaceException {
-        registerFactory(HttpRestRouter.class, new HttpRestRouterFactory(this));
+        registerFactory(new HttpRestRouterFactory(this));
     }
 
     @Override
@@ -34,10 +33,15 @@ public abstract class VertaceWeb extends Vertace {
         httpServer = host() == null || host().isEmpty() ?
                 httpServer.listen(port()) : httpServer.listen(port(), host());
         System.out.println("Server running in port: " + port());
+        future.complete();
     }
 
-    public HttpServer getVertxHttpServer() {
+    public HttpServer vertxHttpServer() {
         return httpServer;
+    }
+
+    public Router vertxRouter() {
+        return router;
     }
 
 }

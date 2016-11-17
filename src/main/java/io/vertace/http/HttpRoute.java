@@ -1,5 +1,6 @@
 package io.vertace.http;
 
+import io.vertace.VertaceWeb;
 import io.vertace.http.context.HttpParamContext;
 import io.vertace.http.context.RequestContext;
 import io.vertace.http.context.ResponseContext;
@@ -20,14 +21,14 @@ public class HttpRoute {
         this.httpRouteHandler = httpRouteHandler;
     }
 
-    public void register() {
-        /*Bace.app().httpServer().router().route(path).method(httpMethod).handler(rctx -> {
+    public void register(VertaceWeb vertaceWeb) {
+        vertaceWeb.vertxRouter().route(path).method(httpMethod).handler(rctx -> {
             if(httpRouteHandler instanceof RequestResponseHandler) {
                 ((RequestResponseHandler)httpRouteHandler).handle(new RequestContext(rctx), new ResponseContext(rctx));
             } else if(httpRouteHandler instanceof HttpParamHandler) {
                 ((HttpParamHandler)httpRouteHandler).handle(new HttpParamContext(rctx));
             }
-        });*/
+        });
     }
 
     public String toString() {
