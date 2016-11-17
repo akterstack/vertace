@@ -10,9 +10,9 @@ public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
     }
 
     @Override
-    public HttpRestRouter initialize(Class<? extends HttpRestRouter> t) {
+    public HttpRestRouter initialize(Class<? extends HttpRestRouter> c) {
         try {
-            HttpRestRouter<?> hrr = t.newInstance();
+            HttpRestRouter<?> hrr = c.newInstance();
             return hrr;
         } catch(InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

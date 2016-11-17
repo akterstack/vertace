@@ -4,7 +4,6 @@ import io.vertace.core.VertaceClassLoader;
 import io.vertace.core.VertaceVerticle;
 import io.vertace.core.factory.Factory;
 import io.vertace.core.factory.HttpRestRouterFactory;
-import io.vertace.core.factory.VertaceVerticleFactory;
 import io.vertace.http.HttpRestRouter;
 import io.vertx.core.Vertx;
 
@@ -17,36 +16,40 @@ import java.util.Set;
 public abstract class Vertace extends VertaceVerticle {
 
     private String[] args;
-    private static Class<? extends Vertace> vertaceAppClass;
-    private static Map<Class<?>, Factory> factoryOfArtifactsMap;
-    private static Set<Class<?>> artifacts = new HashSet<Class<?>>() {{
-        add(VertaceVerticle.class);
+    private Map<Class<?>, Factory> componentFactoriesMap;
+    private Set<Class<?>> components = new HashSet<Class<?>>() {{
         add(HttpRestRouter.class);
     }};
 
     public static void deploy(Vertace vertaceApp) {
+        vertaceApp._bootstrap();
+        vertaceApp._register();
+        vertaceApp._initialize();
         Vertx.vertx().deployVerticle(vertaceApp);
     }
 
-    public void run(String... args) {
-        this.args = args;
-
-        /* Lifecycle methods */
-        bootstrap();
-        register();
-        _initialize();
+    public static void deploy(Vertace vertaceApp, String... args) {
+        vertaceApp.args = args;
+        deploy(vertaceApp);
     }
 
-    private static void bootstrap() {
-        factoryOfArtifactsMap = new HashMap<Class<?>, Factory>() {{
-            put(VertaceVerticle.class, new VertaceVerticleFactory());
+    private void _bootstrap() {
+        componentFactoriesMap = new HashMap<Class<?>, Factory>() {{
             put(HttpRestRouter.class, new HttpRestRouterFactory());
         }};
+        bootstrap();
+    }
+
+    public void bootstrap() {
 
     }
 
-    private static void register() {
-        PackageScope packageScope = vertaceAppClass.getAnnotation(PackageScope.class);
+    public <C> void registerFactory(Class<C> componentClass, Factory<C> factoryObject) {
+        componentFactoriesMap.put(componentClass, factoryObject);
+    }
+
+    private void _register() {
+        PackageScope packageScope = this.getClass().getAnnotation(PackageScope.class);
         if(packageScope == null) return;
 
         for(String pkg : packageScope.value()) {
@@ -64,26 +67,32 @@ public abstract class Vertace extends VertaceVerticle {
             }
         }
 
-        artifacts.forEach(ac -> {
-            Set<Class<?>> classes = factoryOfArtifactsMap.get(ac).getAllArtifactClasses();
+        components.forEach(ac -> {
+            Set<Class<?>> classes = componentFactoriesMap.get(ac).getAllComponentClasses();
             System.out.println("\nRegistered " + ac.getSimpleName() + ": " + classes.size());
             classes.forEach(System.out::println);
         });
+
+        register();
+    }
+
+    public void register() {
+
     }
 
     @SuppressWarnings("unchecked")
-    private static void register(Class<?> clazz) {
-        artifacts.forEach(ac -> {
+    private void register(Class<?> clazz) {
+        components.forEach(ac -> {
             if(ac.isAssignableFrom(clazz)) {
-                Factory factory = factoryOfArtifactsMap.get(ac);
-                factory.register(clazz);
+                Factory factory = componentFactoriesMap.get(ac);
+                factory.registerComponent(clazz);
             }
         });
     }
 
-    private static void _initialize() {
-        artifacts.forEach(ac -> {
-            Factory factory = factoryOfArtifactsMap.get(ac);
+    private void _initialize() {
+        components.forEach(ac -> {
+            Factory factory = componentFactoriesMap.get(ac);
             factory.initialize();
         });
     }

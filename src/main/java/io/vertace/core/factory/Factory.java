@@ -3,18 +3,16 @@ package io.vertace.core.factory;
 import java.util.List;
 import java.util.Set;
 
-public interface Factory<T> {
+public interface Factory<C> {
 
-    Class<T> factoryFor();
+    Class<C> factoryFor();
 
-    void register(Class<? extends T> t);
+    void registerComponent(Class<? extends C> c);
 
     void initialize();
 
-    T initialize(Class<? extends T> t);
+    Set<Class<? extends C>> getAllComponentClasses();
 
-    Set<Class<? extends T>> getAllArtifactClasses();
-
-    List<? extends T> getAllArtifactObjects();
+    List<? extends C> getAllComponentObjects();
 
 }
