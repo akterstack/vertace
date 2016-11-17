@@ -1,6 +1,7 @@
 package io.vertace;
 
 import io.vertace.core.VertaceClassLoader;
+import io.vertace.core.VertaceException;
 import io.vertace.core.VertaceVerticle;
 import io.vertace.core.factory.Factory;
 import io.vertace.core.factory.HttpRestRouterFactory;
@@ -15,7 +16,10 @@ import java.util.Set;
 
 public abstract class Vertace extends VertaceVerticle {
 
+    public enum LifeCycle {BOOTSTRAP, REGISTER, INITIALIZE, DEPLOY}
+
     private String[] args;
+    private LifeCycle currentCycle;
     private Map<Class<?>, Factory> componentFactoriesMap;
     private Set<Class<?>> components = new HashSet<Class<?>>() {{
         add(HttpRestRouter.class);
@@ -26,6 +30,7 @@ public abstract class Vertace extends VertaceVerticle {
         vertaceApp._register();
         vertaceApp._initialize();
         Vertx.vertx().deployVerticle(vertaceApp);
+        vertaceApp.currentCycle = LifeCycle.DEPLOY;
     }
 
     public static void deploy(Vertace vertaceApp, String... args) {
@@ -37,14 +42,13 @@ public abstract class Vertace extends VertaceVerticle {
         componentFactoriesMap = new HashMap<Class<?>, Factory>() {{
             put(HttpRestRouter.class, new HttpRestRouterFactory());
         }};
-        bootstrap();
+        currentCycle = LifeCycle.BOOTSTRAP;
     }
 
-    public void bootstrap() {
-
-    }
-
-    public <C> void registerFactory(Class<C> componentClass, Factory<C> factoryObject) {
+    public <C> void registerFactory(Class<C> componentClass,
+                                    Factory<C> factoryObject) throws VertaceException {
+        if(!LifeCycle.BOOTSTRAP.equals(currentCycle))
+            throw new VertaceException("Register Factory is possible only in Bootstrap lifecycle");
         componentFactoriesMap.put(componentClass, factoryObject);
     }
 
@@ -57,7 +61,7 @@ public abstract class Vertace extends VertaceVerticle {
                 for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
                     try {
                         Class<?> c = Class.forName(cname);
-                        register(c);
+                        _register(c);
                     } catch(ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -72,16 +76,10 @@ public abstract class Vertace extends VertaceVerticle {
             System.out.println("\nRegistered " + ac.getSimpleName() + ": " + classes.size());
             classes.forEach(System.out::println);
         });
-
-        register();
-    }
-
-    public void register() {
-
     }
 
     @SuppressWarnings("unchecked")
-    private void register(Class<?> clazz) {
+    private void _register(Class<?> clazz) {
         components.forEach(ac -> {
             if(ac.isAssignableFrom(clazz)) {
                 Factory factory = componentFactoriesMap.get(ac);
