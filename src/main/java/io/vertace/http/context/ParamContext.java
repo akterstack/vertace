@@ -2,11 +2,11 @@ package io.vertace.http.context;
 
 import io.vertx.ext.web.RoutingContext;
 
-public class HttpParamContext {
+public class ParamContext {
 
     private RoutingContext vertxRoutingContext;
 
-    public HttpParamContext(RoutingContext routingContext) {
+    public ParamContext(RoutingContext routingContext) {
         this.vertxRoutingContext = routingContext;
     }
 

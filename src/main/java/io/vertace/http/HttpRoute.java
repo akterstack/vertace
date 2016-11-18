@@ -1,10 +1,10 @@
 package io.vertace.http;
 
 import io.vertace.VertaceWeb;
-import io.vertace.http.context.HttpParamContext;
+import io.vertace.http.context.ParamContext;
 import io.vertace.http.context.RequestContext;
 import io.vertace.http.context.ResponseContext;
-import io.vertace.http.handler.HttpParamHandler;
+import io.vertace.http.handler.ParamHandler;
 import io.vertace.http.handler.HttpRouteHandler;
 import io.vertace.http.handler.RequestResponseHandler;
 import io.vertx.core.http.HttpMethod;
@@ -25,8 +25,8 @@ public class HttpRoute {
         vertaceWeb.vertxRouter().route(path).method(httpMethod).handler(rctx -> {
             if(httpRouteHandler instanceof RequestResponseHandler) {
                 ((RequestResponseHandler)httpRouteHandler).handle(new RequestContext(rctx), new ResponseContext(rctx));
-            } else if(httpRouteHandler instanceof HttpParamHandler) {
-                ((HttpParamHandler)httpRouteHandler).handle(new HttpParamContext(rctx));
+            } else if(httpRouteHandler instanceof ParamHandler) {
+                ((ParamHandler)httpRouteHandler).handle(new ParamContext(rctx));
             }
         });
     }

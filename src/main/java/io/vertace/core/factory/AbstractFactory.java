@@ -30,9 +30,9 @@ public abstract class AbstractFactory<C> implements Factory<C> {
     @Override
     public void initialize() {
         getAllComponentClasses()
-                .forEach(ac -> {
+                .forEach(cc -> {
                     try {
-                        mapOfArtifactClassAndObject.put(ac, initialize(ac));
+                        mapOfArtifactClassAndObject.put(cc, initialize(cc));
                     } catch(VertaceException e) {
                         e.printStackTrace();
                     }
@@ -41,7 +41,7 @@ public abstract class AbstractFactory<C> implements Factory<C> {
 
     public C initialize(Class<? extends C> c) throws VertaceException {
         //TODO change exception
-        throw new VertaceException("must be implement this method or initialize() method");
+        throw new VertaceException("must be implement this method or override initialize() method");
     }
 
     @Override

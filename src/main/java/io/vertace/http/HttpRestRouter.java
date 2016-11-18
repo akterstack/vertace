@@ -2,7 +2,7 @@ package io.vertace.http;
 
 import io.vertace.VertaceWeb;
 import io.vertace.core.Component;
-import io.vertace.http.handler.HttpParamHandler;
+import io.vertace.http.handler.ParamHandler;
 import io.vertace.http.handler.HttpRouteHandler;
 import io.vertace.http.handler.RequestResponseHandler;
 import io.vertx.core.http.HttpMethod;
@@ -34,7 +34,7 @@ public abstract class HttpRestRouter<R> implements Component {
         return (R)this;
     }
 
-    protected R get(String path, HttpParamHandler handler) {
+    protected R get(String path, ParamHandler handler) {
         registerHttpRoute(path, HttpMethod.GET, handler);
         return (R)this;
     }

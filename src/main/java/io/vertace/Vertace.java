@@ -27,6 +27,7 @@ public abstract class Vertace extends VertaceVerticle {
         Vertx.vertx().deployVerticle(vertaceApp);
     }
 
+    @Override
     protected void register(Future<Void> future) {
         PackageScope packageScope = this.getClass().getAnnotation(PackageScope.class);
         if(packageScope == null) return;
@@ -55,14 +56,15 @@ public abstract class Vertace extends VertaceVerticle {
 
     @SuppressWarnings("unchecked")
     private void _register(Class<?> clazz) {
-        getComponentClasses().forEach(ac -> {
-            if(ac.isAssignableFrom(clazz)) {
-                Factory factory = componentFactoriesMap.get(ac);
+        getComponentClasses().forEach(cc -> {
+            if(cc.isAssignableFrom(clazz)) {
+                Factory factory = componentFactoriesMap.get(cc);
                 factory.registerComponent(clazz);
             }
         });
     }
 
+    @Override
     protected void initialize(Future<Void> future) {
         getComponentClasses().forEach(ac -> {
             Factory factory = componentFactoriesMap.get(ac);
