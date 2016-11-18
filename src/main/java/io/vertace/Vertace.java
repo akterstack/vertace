@@ -3,37 +3,31 @@ package io.vertace;
 import io.vertace.core.Component;
 import io.vertace.core.VertaceClassLoader;
 import io.vertace.core.VertaceException;
-import io.vertace.core.VertaceLifecycle;
 import io.vertace.core.VertaceVerticle;
 import io.vertace.core.factory.Factory;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Vertace extends VertaceVerticle implements VertaceLifecycle {
-
-    public enum LifeCycleState {BOOTSTRAP, REGISTER, INITIALIZE, DEPLOY}
+public abstract class Vertace extends VertaceVerticle {
 
     private String[] args;
-    protected VertaceLifecycle vertaceLifecycle;
-    private LifeCycleState currentState;
-    private final Map<Class<? extends Component>, Factory> componentFactoriesMap = new HashMap<>();
+    private final Map<Class<? extends Component>, Factory> componentFactoriesMap = new LinkedHashMap<>();
 
-    public Vertace() {
-        this.vertaceLifecycle = new VertaceLifecycle() {
-        };
+    public static void deploy(Vertace vertaceApp, String... args) throws VertaceException {
+        vertaceApp.args = args;
+        deploy(vertaceApp);
     }
 
-    private void _bootstrap() throws VertaceException {
-        currentState = LifeCycleState.BOOTSTRAP;
-        onBootstrap();
+    public static void deploy(Vertace vertaceApp) throws VertaceException {
+        Vertx.vertx().deployVerticle(vertaceApp);
     }
 
-    private void _register() {
-        currentState = LifeCycleState.REGISTER;
+    protected void register(Future<Void> future) {
         PackageScope packageScope = this.getClass().getAnnotation(PackageScope.class);
         if(packageScope == null) return;
 
@@ -57,7 +51,6 @@ public abstract class Vertace extends VertaceVerticle implements VertaceLifecycl
             System.out.println("\nRegistered " + ac.getSimpleName() + ": " + classes.size());
             classes.forEach(System.out::println);
         });
-        onRegister();
     }
 
     @SuppressWarnings("unchecked")
@@ -70,37 +63,23 @@ public abstract class Vertace extends VertaceVerticle implements VertaceLifecycl
         });
     }
 
-    private void _initialize() {
-        currentState = LifeCycleState.INITIALIZE;
+    protected void initialize(Future<Void> future) {
+        currentLifecycleState = LifecycleState.INITIALIZE;
         getComponentClasses().forEach(ac -> {
             Factory factory = componentFactoriesMap.get(ac);
             factory.initialize();
         });
-        onInitialize();
+        initialize();
     }
 
     public <C extends Component> void registerFactory(Factory<C> factoryObject) throws VertaceException {
-        if(!LifeCycleState.BOOTSTRAP.equals(currentState))
+        if(!LifecycleState.BOOTSTRAP.equals(currentLifecycleState))
             throw new VertaceException("Register Factory is possible only in Bootstrap lifecycle");
         componentFactoriesMap.put(factoryObject.factoryFor(), factoryObject);
     }
 
     public Set<Class<? extends Component>> getComponentClasses() {
         return componentFactoriesMap.keySet();
-    }
-
-    public static void deploy(Vertace vertaceApp) throws VertaceException {
-        vertaceApp.currentState = LifeCycleState.DEPLOY;
-        vertaceApp._bootstrap();
-        vertaceApp._register();
-        vertaceApp._initialize();
-        Vertx.vertx().deployVerticle(vertaceApp);
-        vertaceApp.onDeploy();
-    }
-
-    public static void deploy(Vertace vertaceApp, String... args) throws VertaceException {
-        vertaceApp.args = args;
-        deploy(vertaceApp);
     }
 
 }

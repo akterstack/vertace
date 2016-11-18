@@ -21,19 +21,25 @@ public abstract class VertaceWeb extends Vertace {
     }
 
     @Override
-    public void onBootstrap() throws VertaceException {
+    public void bootstrap(Future<Void> future) throws VertaceException {
+        currentLifecycleState = LifecycleState.BOOTSTRAP;
         registerFactory(new HttpRestRouterFactory(this));
+        bootstrap();
+    }
+
+    @Override
+    protected void initialize(Future<Void> future) {
+        currentLifecycleState = LifecycleState.INITIALIZE;
+        router = Router.router(vertx);
+        httpServer = vertx.createHttpServer().requestHandler(router::accept);
+        initialize();
     }
 
     @Override
     protected void deploy(Future<Void> future) {
-        router = Router.router(vertx);
-        httpServer = vertx.createHttpServer()
-                .requestHandler(router::accept);
         httpServer = host() == null || host().isEmpty() ?
                 httpServer.listen(port()) : httpServer.listen(port(), host());
         System.out.println("Server running in port: " + port());
-        future.complete();
     }
 
     public HttpServer vertxHttpServer() {

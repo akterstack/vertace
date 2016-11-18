@@ -3,53 +3,49 @@ package io.vertace.core;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 
-import static io.hackable.Hackable.*;
+public abstract class VertaceVerticle extends AbstractVerticle implements VertaceLifecycle {
 
-public abstract class VertaceVerticle extends AbstractVerticle {
+    public enum LifecycleState {BOOTSTRAP, REGISTER, INITIALIZE, DEPLOY, UNDEPLOY}
+    protected LifecycleState currentLifecycleState;
 
     @Override
-    public final void start(Future<Void> future) throws Exception {
-        trigger("beforeBootstrapVerticle", this.getClass(), vertx);
+    public final void start(Future<Void> future) throws VertaceException {
         bootstrap(future);
-        trigger("beforeInitializeVerticle", this.getClass(), vertx);
+        register(future);
         initialize(future);
-        trigger("beforeDeployVerticle", this.getClass(), vertx);
         deploy(future);
     }
 
     @Override
-    public final void stop(Future<Void> future) throws Exception {
-        trigger("beforeUndeployVerticle", this.getClass(), vertx);
+    public final void stop(Future<Void> future) throws VertaceException {
         undeploy(future);
     }
 
-    protected void bootstrap(Future<Void> future) {
+    protected void bootstrap(Future<Void> future) throws VertaceException {
+        currentLifecycleState = LifecycleState.BOOTSTRAP;
+        bootstrap();
+    }
 
+    protected void register(Future<Void> future) throws VertaceException {
+        currentLifecycleState = LifecycleState.REGISTER;
+        register();
     }
 
     protected void initialize(Future<Void> future) {
+        currentLifecycleState = LifecycleState.INITIALIZE;
         initialize();
     }
 
-    protected void initialize() {
-    }
-
     protected void deploy(Future<Void> future) {
+        currentLifecycleState = LifecycleState.DEPLOY;
         deploy();
         future.complete();
     }
 
-    protected void deploy() {
-
-    }
-
     protected void undeploy(Future<Void> future) {
+        currentLifecycleState = LifecycleState.UNDEPLOY;
         undeploy();
         future.complete();
-    }
-
-    protected void undeploy() {
-
     }
 
 }
