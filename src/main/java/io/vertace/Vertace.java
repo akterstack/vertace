@@ -64,12 +64,10 @@ public abstract class Vertace extends VertaceVerticle {
     }
 
     protected void initialize(Future<Void> future) {
-        currentLifecycleState = LifecycleState.INITIALIZE;
         getComponentClasses().forEach(ac -> {
             Factory factory = componentFactoriesMap.get(ac);
             factory.initialize();
         });
-        initialize();
     }
 
     public <C extends Component> void registerFactory(Factory<C> factoryObject) throws VertaceException {

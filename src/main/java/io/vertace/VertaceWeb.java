@@ -22,17 +22,14 @@ public abstract class VertaceWeb extends Vertace {
 
     @Override
     public void bootstrap(Future<Void> future) throws VertaceException {
-        currentLifecycleState = LifecycleState.BOOTSTRAP;
         registerFactory(new HttpRestRouterFactory(this));
-        bootstrap();
     }
 
     @Override
     protected void initialize(Future<Void> future) {
-        currentLifecycleState = LifecycleState.INITIALIZE;
         router = Router.router(vertx);
         httpServer = vertx.createHttpServer().requestHandler(router::accept);
-        initialize();
+        super.initialize(future);
     }
 
     @Override
