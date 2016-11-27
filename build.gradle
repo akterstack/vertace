@@ -16,6 +16,5 @@ repositories {
 
 dependencies {
     compile 'io.hackable:hackable:1.0.0-SNAPSHOT'
-    //compile 'io.edgenode:edgenode:1.0.0-SNAPSHOT'
     compile 'io.vertx:vertx-web:3.3.3'
 }
