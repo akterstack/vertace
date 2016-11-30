@@ -17,7 +17,7 @@ public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {
     @Override
     public HttpRestRouter initialize(Class<? extends HttpRestRouter> c) {
         try {
-            HttpRestRouter<?> hrr = c.newInstance();
+            HttpRestRouter hrr = c.newInstance();
             hrr.initialize((VertaceWeb)vertace());
             return hrr;
         } catch(InstantiationException | IllegalAccessException e) {
