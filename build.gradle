@@ -2,6 +2,7 @@ group 'io.vertace'
 version '1.0.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'maven'
 
 compileJava {
@@ -15,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.8'
     compile 'io.hackable:hackable:1.0.0-SNAPSHOT'
     compile 'io.vertx:vertx-web:3.3.3'
 }
