@@ -13,7 +13,7 @@ public abstract class VertaceWeb extends Vertace {
     private HttpServer httpServer;
 
     public String host() {
-        return null;
+        return "localhost";
     }
 
     public int port() {
@@ -34,8 +34,7 @@ public abstract class VertaceWeb extends Vertace {
 
     @Override
     protected void deploy(Future<Void> future) {
-        httpServer = host() == null || host().isEmpty() ?
-                httpServer.listen(port()) : httpServer.listen(port(), host());
+        httpServer = httpServer.listen(port(), host());
         System.out.println("Server running in port: " + port());
     }
 
