@@ -1,7 +1,8 @@
 group 'io.vertace'
-version '1.0.0-SNAPSHOT'
+version '1.0.0.SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'maven'
 
 compileJava {
@@ -9,12 +10,22 @@ compileJava {
     options.incremental = true
 }
 
+def ver = [
+        vertx: '3.4.0'
+]
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    compile 'io.hackable:hackable:1.0.0-SNAPSHOT'
-    compile 'io.vertx:vertx-web:3.3.3'
+    compile "org.codehaus.groovy:groovy-all:2.4.8"
+    compile "io.hackable:hackable:1.0.0-SNAPSHOT"
+    compile "io.vertx:vertx-web:$ver.vertx"
+    compile "io.vertx:vertx-config:$ver.vertx"
+    compile "io.vertx:vertx-config-yaml:$ver.vertx"
+
+    testCompile "io.vertx:vertx-unit:$ver.vertx"
+    testCompile "junit:junit:4.12"
 }

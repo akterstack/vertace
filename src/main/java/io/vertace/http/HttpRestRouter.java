@@ -9,7 +9,7 @@ import io.vertx.core.http.HttpMethod;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class HttpRestRouter<R> implements Component {
+public abstract class HttpRestRouter implements Component {
 
     private String mountPoint;
     private List<HttpRoute> listOfHttpRoutes = new LinkedList<>();
@@ -18,29 +18,29 @@ public abstract class HttpRestRouter<R> implements Component {
         listOfHttpRoutes.forEach(route -> route.register(vertaceWeb));
     }
 
-    protected R subRouteOf(String mountPoint) {
+    protected HttpRestRouter subRouteOf(String mountPoint) {
         this.mountPoint = mountPoint;
-        return (R)this;
+        return this;
     }
 
-    protected R any(String path, RequestResponseHandler handler) {
+    protected HttpRestRouter any(String path, RequestResponseHandler handler) {
         //TODO
-        return (R)this;
+        return this;
     }
 
-    protected R get(String path, RequestResponseHandler handler) {
+    protected HttpRestRouter get(String path, RequestResponseHandler handler) {
         registerHttpRoute(path, HttpMethod.GET, handler);
-        return (R)this;
+        return this;
     }
 
-    protected R get(String path, ParamHandler handler) {
+    protected HttpRestRouter get(String path, ParamHandler handler) {
         registerHttpRoute(path, HttpMethod.GET, handler);
-        return (R)this;
+        return this;
     }
 
-    protected R route(String path, HttpMethod httpMethod, HttpRouteHandler handler) {
+    protected HttpRestRouter route(String path, HttpMethod httpMethod, HttpRouteHandler handler) {
         registerHttpRoute(path, httpMethod, handler);
-        return (R)this;
+        return this;
     }
 
     private void registerHttpRoute(String path, HttpMethod httpMethod, HttpRouteHandler handler) {
