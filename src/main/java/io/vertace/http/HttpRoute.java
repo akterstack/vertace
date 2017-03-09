@@ -1,6 +1,5 @@
 package io.vertace.http;
 
-import io.vertace.VertaceWeb;
 import io.vertace.http.context.ParamContext;
 import io.vertace.http.context.RequestContext;
 import io.vertace.http.context.ResponseContext;

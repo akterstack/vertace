@@ -1,6 +1,6 @@
 package io.vertace.core.factory;
 
-import io.vertace.VertaceWeb;
+import io.vertace.http.VertaceWeb;
 import io.vertace.http.HttpRestRouter;
 
 public class HttpRestRouterFactory extends AbstractFactory<HttpRestRouter> {

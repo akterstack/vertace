@@ -1,6 +1,5 @@
 package io.vertace.http;
 
-import io.vertace.VertaceWeb;
 import io.vertace.core.Component;
 import io.vertace.http.handler.ParamHandler;
 import io.vertace.http.handler.HttpRouteHandler;

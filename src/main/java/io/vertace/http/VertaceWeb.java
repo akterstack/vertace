@@ -1,5 +1,6 @@
-package io.vertace;
+package io.vertace.http;
 
+import io.vertace.Vertace;
 import io.vertace.core.VertaceException;
 import io.vertace.core.factory.HttpRestRouterFactory;
 import io.vertx.core.Future;
