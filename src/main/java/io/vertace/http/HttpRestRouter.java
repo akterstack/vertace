@@ -34,11 +34,6 @@ public abstract class HttpRestRouter implements Component {
         return this;
     }
 
-    protected HttpRestRouter get(String path, ParamHandler handler) {
-        registerHttpRoute(path, HttpMethod.GET, handler);
-        return this;
-    }
-
     protected HttpRestRouter route(String path, HttpMethod httpMethod, HttpRouteHandler handler) {
         registerHttpRoute(path, httpMethod, handler);
         return this;
