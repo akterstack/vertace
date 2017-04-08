@@ -18,7 +18,7 @@ public abstract class VertaceWeb extends Vertace {
     }
 
     public int port() {
-        return 8070;
+        return 1971;
     }
 
     @Override
