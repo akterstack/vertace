@@ -11,7 +11,7 @@ compileJava {
 }
 
 def ver = [
-        vertx: '3.4.0'
+        vertx: '3.4.1'
 ]
 
 repositories {
@@ -20,12 +20,12 @@ repositories {
 }
 
 dependencies {
-    compile "org.codehaus.groovy:groovy-all:2.4.8"
     compile "io.hackable:hackable:1.0.0-SNAPSHOT"
     compile "io.vertx:vertx-web:$ver.vertx"
     compile "io.vertx:vertx-config:$ver.vertx"
     compile "io.vertx:vertx-config-yaml:$ver.vertx"
 
+    testCompile "org.codehaus.groovy:groovy-all:2.4.9"
     testCompile "io.vertx:vertx-unit:$ver.vertx"
     testCompile "junit:junit:4.12"
 }
