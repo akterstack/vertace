@@ -11,6 +11,9 @@ public abstract class EbusRouter {
 
     public EbusRouter subRouteOf(String subRoute) {
         Objects.requireNonNull(subRoute, "Sub-route cannot be null");
+        if(subRoute.contains(":")) {
+            throw new RuntimeException("Namespace should not contain ':'");
+        }
         mountPoint = subRoute + ":";
         return this;
     }
@@ -21,6 +24,9 @@ public abstract class EbusRouter {
     }
 
     private void registerRoute(String namespace, EbusRouteHandler handler) {
+        if(namespace.contains(":")) {
+            throw new RuntimeException("Namespace should not contain ':'");
+        }
         ebusRouteList.add(new EbusRoute(mountPoint + namespace, handler));
     }
 
