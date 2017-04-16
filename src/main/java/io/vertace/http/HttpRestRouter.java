@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class HttpRestRouter implements Component {
 
-    private String mountPoint;
+    private String mountPoint = "";
     private List<HttpRoute> listOfHttpRoutes = new LinkedList<>();
 
     public final void initialize(VertaceWeb vertaceWeb) {
@@ -41,9 +41,7 @@ public abstract class HttpRestRouter implements Component {
     private void registerHttpRoute(String path, HttpMethod httpMethod, HttpRouteHandler handler) {
         listOfHttpRoutes
                 .add(new HttpRoute(
-                        mountPoint == null ? path : mountPoint + path,
-                        httpMethod,
-                        handler));
+                        mountPoint + path, httpMethod, handler));
     }
 
 }
