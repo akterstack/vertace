@@ -18,9 +18,10 @@ public abstract class Vertace extends VertaceVerticle {
     private String[] args;
     private final Map<Class<? extends Component>, Factory> componentFactoriesMap = new LinkedHashMap<>();
 
-    public static void deploy(Vertace vertaceApp, String... args) throws VertaceException {
-        vertaceApp.args = args;
-        deploy(vertaceApp);
+    public Vertace() {}
+
+    public Vertace(String... args) {
+        this.args = args;
     }
 
     public static void deploy(Vertace vertaceApp) throws VertaceException {
