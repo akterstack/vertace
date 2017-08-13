@@ -1,4 +1,4 @@
-package io.vertace;
+package io.vertace.ebus;
 
 public final class EbusRoute {
 

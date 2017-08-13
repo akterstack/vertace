@@ -1,4 +1,4 @@
-package io.vertace;
+package io.vertace.ebus;
 
 import java.util.LinkedList;
 import java.util.List;
