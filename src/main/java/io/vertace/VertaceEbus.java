@@ -1,4 +1,4 @@
 package io.vertace;
 
-public class VertaceEbus {
+public abstract class VertaceEbus extends Vertace {
 }

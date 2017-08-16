@@ -24,8 +24,10 @@ public abstract class Vertace extends VertaceVerticle {
         this.args = args;
     }
 
-    public static void deploy(Vertace vertaceApp) throws VertaceException {
-        Vertx.vertx().deployVerticle(vertaceApp);
+    public static void deploy(Vertace... vertaceApps) throws VertaceException {
+        for(Vertace vertaceApp : vertaceApps) {
+            Vertx.vertx().deployVerticle(vertaceApp);
+        }
     }
 
     @Override
