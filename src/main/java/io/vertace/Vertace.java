@@ -16,11 +16,14 @@ import java.util.Set;
 public abstract class Vertace extends VertaceVerticle {
 
     private String[] args;
-    private final Map<Class<? extends Component>, Factory> componentFactoriesMap = new LinkedHashMap<>();
+    private final Map<Class<? extends Component>, Factory> componentFactoriesMap;
 
-    public Vertace() {}
+    public Vertace() {
+        componentFactoriesMap = new LinkedHashMap<>();
+    }
 
     public Vertace(String... args) {
+        this();
         this.args = args;
     }
 
