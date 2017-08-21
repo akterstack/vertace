@@ -1,91 +1,31 @@
 package io.vertace;
 
-import io.vertace.core.Component;
-import io.vertace.core.VertaceClassLoader;
-import io.vertace.core.VertaceException;
-import io.vertace.core.VertaceVerticle;
-import io.vertace.core.factory.Factory;
+import io.hackable.Hackable;
+import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.function.Consumer;
 
-public abstract class Vertace extends VertaceVerticle {
+import static io.vertace.VertaceHacks.*;
 
-    private String[] args;
-    private final Map<Class<? extends Component>, Factory> componentFactoriesMap;
+public interface Vertace extends Hackable {
 
-    public Vertace() {
-        componentFactoriesMap = new LinkedHashMap<>();
+  static void run(Vertace... vertaceApps) {
+    for(Vertace vertaceApp : vertaceApps) {
+
     }
+  }
 
-    public Vertace(String... args) {
-        this();
-        this.args = args;
-    }
 
-    public static void deploy(Vertace... vertaceApps) throws VertaceException {
-        for(Vertace vertaceApp : vertaceApps) {
-            Vertx.vertx().deployVerticle(vertaceApp);
-        }
-    }
 
-    @Override
-    protected void register(Future<Void> future) {
-        PackageScope packageScope = this.getClass().getAnnotation(PackageScope.class);
-        if(packageScope == null) return;
+  /*@Override
+  public void start(Future<Void> startFuture) throws Exception {
+    _trigger(deploy.name(), startFuture, (Consumer<Future<Void>>)Future::complete);
+  }
 
-        for(String pkg : packageScope.value()) {
-            try {
-                for(String cname : VertaceClassLoader.listOfClassNames(pkg)) {
-                    try {
-                        Class<?> c = Class.forName(cname);
-                        _register(c);
-                    } catch(ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        getComponentClasses().forEach(ac -> {
-            Set<Class<?>> classes = componentFactoriesMap.get(ac).getAllComponentClasses();
-            System.out.println("\nRegistered " + ac.getSimpleName() + ": " + classes.size());
-            classes.forEach(System.out::println);
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    private void _register(Class<?> clazz) {
-        getComponentClasses().forEach(cc -> {
-            if(cc.isAssignableFrom(clazz)) {
-                Factory factory = componentFactoriesMap.get(cc);
-                factory.registerComponent(clazz);
-            }
-        });
-    }
-
-    @Override
-    protected void initialize(Future<Void> future) {
-        getComponentClasses().forEach(ac -> {
-            Factory factory = componentFactoriesMap.get(ac);
-            factory.initialize();
-        });
-    }
-
-    public <C extends Component> void registerFactory(Factory<C> factoryObject) throws VertaceException {
-        if(!LifecycleState.BOOTSTRAP.equals(currentLifecycleState))
-            throw new VertaceException("Register Factory is possible only in Bootstrap lifecycle");
-        componentFactoriesMap.put(factoryObject.factoryFor(), factoryObject);
-    }
-
-    public Set<Class<? extends Component>> getComponentClasses() {
-        return componentFactoriesMap.keySet();
-    }
+  @Override
+  public void stop(Future<Void> stopFuture) throws Exception {
+    _trigger(undeploy.name(), stopFuture, (Consumer<Future<Void>>)Future::complete);
+  }*/
 
 }

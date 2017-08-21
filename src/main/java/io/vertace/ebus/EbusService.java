@@ -1,4 +1,6 @@
 package io.vertace.ebus;
 
-public @interface EbusService {
+import io.vertace.core.Component;
+
+public abstract class EbusService implements Component {
 }

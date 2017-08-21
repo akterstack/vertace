@@ -25,7 +25,7 @@ dependencies {
     compile "io.vertx:vertx-config-yaml:$ver.vertx"
     compile project(':hackable') ?: "io.hackable:hackable:2017.SNAPSHOT"
 
-    testCompile "org.codehaus.groovy:groovy-all:2.4.10"
+    testCompile "org.codehaus.groovy:groovy:2.4.12"
     testCompile "io.vertx:vertx-unit:$ver.vertx"
     testCompile "junit:junit:4.12"
 }
