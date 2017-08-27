@@ -5,6 +5,8 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.Message;
 
+import java.math.BigDecimal;
+
 public class EbusClient {
 
   private final Vertx vertx;
@@ -31,6 +33,10 @@ public class EbusClient {
 
   public <R> void send(Handler<AsyncResult<Message<R>>> replyHandler) {
     vertx.eventBus().send(address, message, replyHandler);
+  }
+
+  public void hel(String pic, BigDecimal pio) {
+
   }
 
 
