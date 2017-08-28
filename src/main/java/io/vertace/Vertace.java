@@ -1,14 +1,14 @@
 package io.vertace;
 
+import io.hackable.Filter;
 import io.hackable.Hackable;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
+import io.hackable.Handler;
 
-import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static io.vertace.VertaceHacks.*;
-
-public interface Vertace extends Hackable {
+public abstract class Vertace implements Hackable<VertaceHooks> {
 
   static void run(Vertace... vertaceApps) {
     for(Vertace vertaceApp : vertaceApps) {
@@ -16,7 +16,18 @@ public interface Vertace extends Hackable {
     }
   }
 
+  private static final Map<String, List<Handler<?>>> actionHandlersHostMap = new HashMap<>();
+  private static final Map<String, List<Filter<?>>> filterHandlersHostMap = new HashMap<>();
 
+  @Override
+  public Map<String, List<Handler<?>>> getActionHandlerHostMap() {
+    return actionHandlersHostMap;
+  }
+
+  @Override
+  public Map<String, List<Filter<?>>> getFilterHandlerHostMap() {
+    return filterHandlersHostMap;
+  }
 
   /*@Override
   public void start(Future<Void> startFuture) throws Exception {

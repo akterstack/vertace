@@ -1,6 +1,6 @@
 package io.vertace;
 
-public enum VertaceHacks {
+public enum VertaceHooks {
 
   deploy,
   undeploy
